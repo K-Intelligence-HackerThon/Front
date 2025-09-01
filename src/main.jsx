@@ -1,15 +1,10 @@
-// index.jsx
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
-import store from "./Store/store.jsx";  
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>   {/* ✅ props 오타 수정 */}
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );
