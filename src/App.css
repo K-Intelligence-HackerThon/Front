@@ -1,10 +1,6 @@
-/* MainPage.css */
-
-/* 기본 스타일 */
 body {
   margin: 0;
-  padding-top: 64px; /* 고정된 네비게이션 바 높이만큼 패딩 추가 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Courier New", Courier, monospace;
   color: #333;
 }
 
@@ -61,10 +57,6 @@ body {
   text-decoration: none;
   transition: opacity 0.3s;
   font-weight: bold;
-}
-
-.nav-links a:hover {
-  opacity: 0.8;
 }
 
 /* 히어로 섹션 */
@@ -146,4 +138,192 @@ body {
   text-align: center;
   padding: 1rem 0;
   margin-top: auto;
+}
+.nav-links .nav-button {
+  background: none;
+  border: none;
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: color 0.3s;
+  font-size: 20px;
+  font-weight: bold;
+  transition: 0.2s all ease-in;
+}
+
+.nav-links .nav-button:hover {
+  color: #007bff;
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background-color: #ffffff !important; /* 강제로 흰색 배경 적용 */
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  opacity: 1; /* 투명도 1로 설정 */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* 제목 스타일 */
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 폼 컨테이너 스타일 */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 입력 필드 스타일 */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 제출 버튼 스타일 */
+.submit-button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.3s ease;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 로딩 스피너 */
+.submit-button.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 로딩 스피너 키프레임 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 타이머 텍스트 스타일 */
+.timer-text {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 인증 버튼 스타일 */
+.auth-button {
+  background-color: rgb(93, 136, 255);
+  color: white;
+  font-weight: bold;
+}
+
+.auth-button:hover:not(:disabled) {
+  background-color: #0026ff;
+  border: none;
+}
+
+.auth-button.loading::after {
+  border-top-color: white;
+}
+
+/* 토스트 알림 흰색 바 애니메이션 키프레임 */
+@keyframes toastAnimation {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* 토스트 알림 스타일 */
+.toast-success-bar::after,
+.toast-error-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: white;
+  animation: toastAnimation 4s linear forwards;
+}
+
+.toast-success {
+  background: #22c55e !important;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 에러 토스트 스타일 */
+.toast-error {
+  background: #ef4444 !important;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 일반 토스트 스타일 */
+.toast-normal {
+  background: #363636 !important;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
 }
