@@ -1,4 +1,4 @@
-import axios from "axios"; 
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -51,7 +51,7 @@ function LoginModal({ show, onClose, isRegister }) {
     setEmailLoading(true);
     try {
       const res = await axios.post(
-        "https://d9596e9505fe.ngrok-free.app/email/send",
+        "https://b30f0aba73c8.ngrok-free.app/email/send",
         { email }
       );
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -72,7 +72,7 @@ function LoginModal({ show, onClose, isRegister }) {
     setEmailLoading(true);
     try {
       const res = await axios.post(
-        "https://d9596e9505fe.ngrok-free.app/email/check",
+        "https://b30f0aba73c8.ngrok-free.app/email/check",
         { email, verificationCode }
       );
       toast.success("인증번호가 확인되었습니다!");
@@ -92,7 +92,7 @@ function LoginModal({ show, onClose, isRegister }) {
     setLoading(true);
     try {
       const res = await axios.post(
-        "https://d9596e9505fe.ngrok-free.app/auth/login",
+        "https://b30f0aba73c8.ngrok-free.app/auth/login",
         { email, password }
       );
       toast.success("로그인 성공!");
@@ -116,7 +116,7 @@ function LoginModal({ show, onClose, isRegister }) {
     setLoading(true);
     try {
       const res = await axios.post(
-        "https://d9596e9505fe.ngrok-free.app/auth/signup",
+        "hhttps://b30f0aba73c8.ngrok-free.app/auth/signup",
         { email, password, verificationCode }
       );
       toast.success("회원가입 성공!");
