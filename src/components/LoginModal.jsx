@@ -116,7 +116,6 @@ function LoginModal({ show, onClose, isRegister }) {
     setLoading(true);
     try {
       const res = await axios.post(
-        // ✅ axios.post로 변경
         "https://d9596e9505fe.ngrok-free.app/auth/signup",
         { email, password, verificationCode }
       );
