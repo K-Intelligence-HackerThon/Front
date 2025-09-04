@@ -52,7 +52,6 @@ function PptPage() {
       <Toaster
         position="top-right"
         toastOptions={{
-          // ✅ 수정: 모든 토스트에 적용될 공통 클래스 추가
           className: "custom-toast",
           duration: 3000,
           style: {
@@ -79,6 +78,7 @@ function PptPage() {
           },
         }}
       />
+
       <div className="upload-box">
         <h2 className="upload-title">파일 업로드</h2>
         <p className="upload-subtitle">.pptx 또는 .xls 파일을 선택하세요.</p>

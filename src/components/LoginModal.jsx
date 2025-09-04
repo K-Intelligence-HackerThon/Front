@@ -3,11 +3,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-function LoginModal({ show, onClose, isRegister }) {
+function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [authNum, setauthNum] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
   const [timer, setTimer] = useState(180);
@@ -16,23 +16,23 @@ function LoginModal({ show, onClose, isRegister }) {
 
   useEffect(() => {
     let countdown;
-    if (isCodeSent && timer > 0) {
+    if (isCodeSent && timer > 0 && !isCodeVerified) {
       countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
-    } else if (timer === 0) {
+    } else if (timer === 0 && !isCodeVerified) {
       clearInterval(countdown);
       toast.error("인증 시간이 만료되었습니다.");
       setIsCodeSent(false);
       setTimer(180);
     }
     return () => clearInterval(countdown);
-  }, [isCodeSent, timer]);
+  }, [isCodeSent, timer, isCodeVerified]);
 
   useEffect(() => {
     if (!show) {
       setEmail("");
       setPassword("");
       setPasswordCheck("");
-      setVerificationCode("");
+      setauthNum("");
       setIsCodeSent(false);
       setIsCodeVerified(false);
       setTimer(180);
@@ -51,7 +51,7 @@ function LoginModal({ show, onClose, isRegister }) {
     setEmailLoading(true);
     try {
       const res = await axios.post(
-        "https://b30f0aba73c8.ngrok-free.app/email/send",
+        "https://db329f0c5a17.ngrok-free.app/email/send",
         { email }
       );
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -65,15 +65,15 @@ function LoginModal({ show, onClose, isRegister }) {
   };
 
   const handleVerificationCheck = async () => {
-    if (!verificationCode) {
+    if (!authNum) {
       toast.error("인증번호를 입력하세요.");
       return;
     }
     setEmailLoading(true);
     try {
       const res = await axios.post(
-        "https://b30f0aba73c8.ngrok-free.app/email/check",
-        { email, verificationCode }
+        "https://db329f0c5a17.ngrok-free.app/email/check",
+        { email, authNum }
       );
       toast.success("인증번호가 확인되었습니다!");
       setIsCodeVerified(true);
@@ -92,10 +92,10 @@ function LoginModal({ show, onClose, isRegister }) {
     setLoading(true);
     try {
       const res = await axios.post(
-        "https://b30f0aba73c8.ngrok-free.app/auth/login",
+        "https://db329f0c5a17.ngrok-free.app/auth/login",
         { email, password }
       );
-      toast.success("로그인 성공!");
+      onLoginSuccess(email);
       onClose();
     } catch (err) {
       toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
@@ -105,7 +105,7 @@ function LoginModal({ show, onClose, isRegister }) {
   };
 
   const handleRegister = async () => {
-    if (!email || !password || !passwordCheck || !verificationCode) {
+    if (!email || !password || !passwordCheck || !authNum) {
       toast.error("모든 입력창을 입력하세요.");
       return;
     }
@@ -116,10 +116,10 @@ function LoginModal({ show, onClose, isRegister }) {
     setLoading(true);
     try {
       const res = await axios.post(
-        "hhttps://b30f0aba73c8.ngrok-free.app/auth/signup",
-        { email, password, verificationCode }
+        "https://db329f0c5a17.ngrok-free.app/auth/signup",
+        { email, password, authNum }
       );
-      toast.success("회원가입 성공!");
+      onLoginSuccess(email);
       onClose();
     } catch (err) {
       toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
@@ -176,8 +176,8 @@ function LoginModal({ show, onClose, isRegister }) {
                     type="text"
                     className="input-field"
                     placeholder="인증번호 (6자리)"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
+                    value={authNum}
+                    onChange={(e) => setauthNum(e.target.value)}
                     maxLength={6}
                   />
                   <div className="timer-text">
@@ -186,11 +186,16 @@ function LoginModal({ show, onClose, isRegister }) {
                   <button
                     className={`auth-button ${emailLoading ? "loading" : ""}`}
                     onClick={handleVerificationCheck}
-                    disabled={emailLoading || !verificationCode}
+                    disabled={emailLoading || !authNum}
                   >
                     {emailLoading ? "확인 중..." : "인증번호 확인"}
                   </button>
                 </>
+              )}
+              {isCodeVerified && (
+                <div className="verification-success">
+                  이메일 인증이 완료되었습니다.
+                </div>
               )}
             </>
           )}

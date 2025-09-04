@@ -1,11 +1,13 @@
-import "./App.css";
+import { Route, Routes } from "react-router-dom";
 import MainPage from "./components/Maingb";
-
+import PptPage from "./components/PPT";
+import "./App.css"; 
 function App() {
   return (
-    <>
-      <MainPage />
-    </>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/main" element={<PptPage />} />
+    </Routes>
   );
 }
 

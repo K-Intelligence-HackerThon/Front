@@ -4,12 +4,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
 
-const navItems = [
-  { text: "시작하기", type: "start" },
-  { text: "로그인", type: "login" },
-  { text: "회원가입", type: "register" },
-];
-
 const visions = [
   {
     title: "Vision One",
@@ -27,20 +21,31 @@ const visions = [
 
 function MainPage() {
   const [modalType, setModalType] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
   const navigate = useNavigate();
 
   const openModal = (type) => setModalType(type);
   const closeModal = () => setModalType(null);
 
   const handleStartClick = () => {
-    if (isLoggedIn) {
+    if (userEmail) { 
       navigate("/main");
     } else {
       toast.error("로그인을 해주세요.", {
         duration: 3000,
       });
     }
+  };
+
+  const handleLoginSuccess = (email) => {
+    setUserEmail(email);
+  };
+
+  const handleLogout = () => {
+    setUserEmail(null); 
+    toast.success("로그아웃되었습니다.", {
+      duration: 3000,
+    });
   };
 
   const handleNavItemClick = (type) => {
@@ -54,8 +59,27 @@ function MainPage() {
       case "register":
         openModal("register");
         break;
+      case "logout":
+        handleLogout();
+        break;
       default:
         break;
+    }
+  };
+  
+  const getNavItems = () => {
+    if (userEmail) {
+      return [
+        { text: "시작하기", type: "start", className: "nav-button" },
+        { text: `(${userEmail})님`, type: "user", className: "nav-button-user" },
+        { text: "로그아웃", type: "logout", className: "nav-button" },
+      ];
+    } else {
+      return [
+        { text: "시작하기", type: "start", className: "nav-button" },
+        { text: "로그인", type: "login", className: "nav-button" },
+        { text: "회원가입", type: "register", className: "nav-button" },
+      ];
     }
   };
 
@@ -94,13 +118,13 @@ function MainPage() {
       <nav className="navbar">
         <div className="container nav-container">
           <a href="#home" className="logo">
-            Project Name
+            Q-Ready
           </a>
           <ul className="nav-links">
-            {navItems.map((item, index) => (
+            {getNavItems().map((item, index) => (
               <li key={index}>
                 <button
-                  className="nav-button"
+                  className={item.className}
                   onClick={() => handleNavItemClick(item.type)}
                 >
                   {item.text}
@@ -144,6 +168,7 @@ function MainPage() {
           show={true}
           onClose={closeModal}
           isRegister={modalType === "register"}
+          onLoginSuccess={handleLoginSuccess}
         />
       )}
     </div>
