@@ -1,3 +1,4 @@
+import axios from "axios"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -49,20 +50,15 @@ function LoginModal({ show, onClose, isRegister }) {
     }
     setEmailLoading(true);
     try {
-      const res = await fetch(
-        "https://f957e7581e09.ngrok-free.app/email/send",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
+      const res = await axios.post(
+        "https://d9596e9505fe.ngrok-free.app/email/send",
+        { email }
       );
-      if (!res.ok) throw new Error("이메일 발송 실패");
       toast.success("인증번호가 이메일로 전송되었습니다.");
       setIsCodeSent(true);
       setTimer(180);
     } catch (err) {
-      toast.error(`에러 발생: ${err.message}`);
+      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
     } finally {
       setEmailLoading(false);
     }
@@ -75,22 +71,14 @@ function LoginModal({ show, onClose, isRegister }) {
     }
     setEmailLoading(true);
     try {
-      const res = await fetch(
-        "https://f957e7581e09.ngrok-free.app/email/check",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, verificationCode }),
-        }
+      const res = await axios.post(
+        "https://d9596e9505fe.ngrok-free.app/email/check",
+        { email, verificationCode }
       );
-      const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.message || "인증번호가 올바르지 않습니다.");
-
       toast.success("인증번호가 확인되었습니다!");
       setIsCodeVerified(true);
     } catch (err) {
-      toast.error(`에러 발생: ${err.message}`);
+      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
     } finally {
       setEmailLoading(false);
     }
@@ -103,20 +91,14 @@ function LoginModal({ show, onClose, isRegister }) {
     }
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://f957e7581e09.ngrok-free.app/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
+      const res = await axios.post(
+        "https://d9596e9505fe.ngrok-free.app/auth/login",
+        { email, password }
       );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "로그인 실패");
       toast.success("로그인 성공!");
       onClose();
     } catch (err) {
-      toast.error(`에러 발생: ${err.message}`);
+      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
     } finally {
       setLoading(false);
     }
@@ -133,20 +115,15 @@ function LoginModal({ show, onClose, isRegister }) {
     }
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://f957e7581e09.ngrok-free.app/auth/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, verificationCode }),
-        }
+      const res = await axios.post(
+        // ✅ axios.post로 변경
+        "https://d9596e9505fe.ngrok-free.app/auth/signup",
+        { email, password, verificationCode }
       );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "회원가입 실패");
       toast.success("회원가입 성공!");
       onClose();
     } catch (err) {
-      toast.error(`에러 발생: ${err.message}`);
+      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
     } finally {
       setLoading(false);
     }
