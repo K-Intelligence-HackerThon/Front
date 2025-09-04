@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -29,19 +30,24 @@ function PptPage() {
 
     const serverUrl = "https://your-placeholder-server.com/upload";
     try {
-      const response = await fetch(serverUrl, {
-        method: "POST",
-        body: formData,
+      const response = await axios.post(serverUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         toast.success("파일이 성공적으로 업로드되었습니다.");
       } else {
         toast.error("파일 업로드에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
       console.error("업로드 중 에러 발생:", error);
-      toast.error("네트워크 오류 또는 서버 오류가 발생했습니다.");
+      toast.error(
+        `네트워크 오류 또는 서버 오류가 발생했습니다: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     } finally {
       setLoading(false);
     }
@@ -50,7 +56,7 @@ function PptPage() {
   return (
     <div className="ppt-page-container">
       <Toaster
-        position="top-right"
+        position="top-center"
         toastOptions={{
           className: "custom-toast",
           duration: 3000,
@@ -78,24 +84,32 @@ function PptPage() {
           },
         }}
       />
-
-      <div className="upload-box">
-        <h2 className="upload-title">파일 업로드</h2>
-        <p className="upload-subtitle">.pptx 또는 .xls 파일을 선택하세요.</p>
-
-        <input type="file" onChange={handleFileChange} className="file-input" />
-
-        {selectedFile && (
-          <p className="file-info">선택된 파일: {selectedFile.name}</p>
-        )}
-
-        <button
-          onClick={handleFileUpload}
-          disabled={!selectedFile || loading}
-          className="upload-button"
-        >
-          {loading ? "업로드 중..." : "서버로 전송"}
-        </button>
+      <div className="upload-box-wrapper">
+        <div className="upload-box-v2">
+          <h2 className="upload-title">파일 업로드</h2>
+          <p className="upload-subtitle">.pptx 또는 .xls 파일을 선택하세요.</p>
+          <div className="file-input-wrapper">
+            <input
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+              className="file-input-v2"
+            />
+            <label htmlFor="file-upload" className="file-input-label">
+              파일 선택
+            </label>
+          </div>
+          {selectedFile && (
+            <p className="file-info-v2">선택된 파일: {selectedFile.name}</p>
+          )}
+          <button
+            onClick={handleFileUpload}
+            disabled={!selectedFile || loading}
+            className={`upload-button-v2 ${loading ? "loading" : ""}`}
+          >
+            {loading ? "생성중..." : "todo리스트 생성하기"}
+          </button>
+        </div>
       </div>
     </div>
   );

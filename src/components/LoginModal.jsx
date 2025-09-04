@@ -58,7 +58,12 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
       setIsCodeSent(true);
       setTimer(180);
     } catch (err) {
-      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
+      const errorMessage = err.response?.data?.message || err.message;
+      if (errorMessage.includes("already exists")) {
+        toast.error("이미 가입된 이메일입니다.");
+      } else {
+        toast.error(`에러 발생: ${errorMessage}`);
+      }
     } finally {
       setEmailLoading(false);
     }
@@ -78,7 +83,12 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
       toast.success("인증번호가 확인되었습니다!");
       setIsCodeVerified(true);
     } catch (err) {
-      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
+      const errorMessage = err.response?.data?.message || err.message;
+      if (errorMessage.includes("invalid code")) {
+        toast.error("인증번호가 올바르지 않습니다.");
+      } else {
+        toast.error(`에러 발생: ${errorMessage}`);
+      }
     } finally {
       setEmailLoading(false);
     }
@@ -98,7 +108,12 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
       onLoginSuccess(email);
       onClose();
     } catch (err) {
-      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
+      const errorMessage = err.response?.data?.message || err.message;
+      if (errorMessage.includes("Invalid credentials")) {
+        toast.error("이메일 또는 비밀번호를 잘못 입력했습니다.");
+      } else {
+        toast.error(`에러 발생: ${errorMessage}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -122,7 +137,14 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
       onLoginSuccess(email);
       onClose();
     } catch (err) {
-      toast.error(`에러 발생: ${err.response?.data?.message || err.message}`);
+      const errorMessage = err.response?.data?.message || err.message;
+      if (errorMessage.includes("invalid code")) {
+        toast.error("인증번호가 올바르지 않습니다.");
+      } else if (errorMessage.includes("already exists")) {
+        toast.error("이미 가입된 이메일입니다.");
+      } else {
+        toast.error(`에러 발생: ${errorMessage}`);
+      }
     } finally {
       setLoading(false);
     }
