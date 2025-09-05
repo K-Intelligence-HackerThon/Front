@@ -6,7 +6,7 @@ import PptPage from "./components/PPT";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const userEmail = localStorage.getItem("userEmail");
+  const userEmail = sessionStorage.getItem("userEmail"); 
   const isAllowed = !!userEmail;
   return (
     <Routes>

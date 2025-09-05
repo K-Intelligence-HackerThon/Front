@@ -1,5 +1,4 @@
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -14,6 +13,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
 
+  // useEffect for timer
   useEffect(() => {
     let countdown;
     if (isCodeSent && timer > 0 && !isCodeVerified) {
@@ -27,6 +27,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     return () => clearInterval(countdown);
   }, [isCodeSent, timer, isCodeVerified]);
 
+  // useEffect to reset state when modal is closed
   useEffect(() => {
     if (!show) {
       setEmail("");
@@ -50,7 +51,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8080/email/send", {
+      await axios.post("http://10.80.161.158:8080/email/send", {
         email,
       });
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -75,7 +76,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8080/email/check", {
+      await axios.post("http://10.80.161.158:8080/email/check", {
         email,
         authNum,
       });
@@ -100,7 +101,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8080/auth/login", {
+      await axios.post("http://10.80.161.158:8080/auth/login", {
         email,
         password,
       });
@@ -129,7 +130,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8080/auth/signup", {
+      await axios.post("http://10.80.161.158:8080/auth/signup", {
         email,
         password,
         authNum,
@@ -165,89 +166,97 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <span className="close-button" onClick={onClose}>
-          &times;
-        </span>
-        <h2 className="modal-title">{isRegister ? "회원가입" : "로그인"}</h2>
-        <div className="form-container">
-          <input
-            type="email"
-            className="input-field"
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isCodeSent && isRegister}
-          />
+    <>
+      <link 
+        rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+        crossorigin="anonymous" 
+      />
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <span className="close-button" onClick={onClose}>
+            &times;
+          </span>
+          <h2 className="modal-title">{isRegister ? "회원가입" : "로그인"}</h2>
+          <div className="form-container">
+            <input
+              type="email"
+              className="input-field"
+              placeholder="이메일"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isCodeSent && isRegister}
+            />
 
-          {isRegister && (
-            <>
-              {!isCodeSent && (
-                <button
-                  className={`auth-button ${emailLoading ? "loading" : ""}`}
-                  onClick={handleEmailVerification}
-                  disabled={emailLoading || !email}
-                >
-                  {emailLoading ? "전송 중..." : "이메일 인증"}
-                </button>
-              )}
-              {isCodeSent && !isCodeVerified && (
-                <>
-                  <input
-                    type="text"
-                    className="input-field"
-                    placeholder="인증번호 (6자리)"
-                    value={authNum}
-                    onChange={(e) => setauthNum(e.target.value)}
-                    maxLength={6}
-                  />
-                  <div className="timer-text">
-                    남은 시간: {formatTime(timer)}
-                  </div>
+            {isRegister && (
+              <>
+                {!isCodeSent && (
                   <button
                     className={`auth-button ${emailLoading ? "loading" : ""}`}
-                    onClick={handleVerificationCheck}
-                    disabled={emailLoading || !authNum}
+                    onClick={handleEmailVerification}
+                    disabled={emailLoading || !email}
                   >
-                    {emailLoading ? "확인 중..." : "인증번호 확인"}
+                    {emailLoading ? "전송 중..." : "이메일 인증"}
                   </button>
-                </>
-              )}
-              {isCodeVerified && (
-                <div className="verification-success">
-                  이메일 인증이 완료되었습니다.
-                </div>
-              )}
-            </>
-          )}
+                )}
+                {isCodeSent && !isCodeVerified && (
+                  <>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="인증번호 (6자리)"
+                      value={authNum}
+                      onChange={(e) => setauthNum(e.target.value)}
+                      maxLength={6}
+                    />
+                    <div className="timer-text">
+                      남은 시간: {formatTime(timer)}
+                    </div>
+                    <button
+                      className={`auth-button ${emailLoading ? "loading" : ""}`}
+                      onClick={handleVerificationCheck}
+                      disabled={emailLoading || !authNum}
+                    >
+                      {emailLoading ? "확인 중..." : "인증번호 확인"}
+                    </button>
+                  </>
+                )}
+                {isCodeVerified && (
+                  <div className="verification-success">
+                    이메일 인증이 완료되었습니다.
+                  </div>
+                )}
+              </>
+            )}
 
-          <input
-            type="password"
-            className="input-field"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {isRegister && (
             <input
               type="password"
               className="input-field"
-              placeholder="비밀번호 확인"
-              value={passwordCheck}
-              onChange={(e) => setPasswordCheck(e.target.value)}
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-          )}
-          <button
-            className={`submit-button ${loading ? "loading" : ""}`}
-            onClick={handleSubmit}
-            disabled={loading || (isRegister && !isCodeVerified)}
-          >
-            {loading ? "처리 중..." : isRegister ? "가입하기" : "로그인"}
-          </button>
+            {isRegister && (
+              <input
+                type="password"
+                className="input-field"
+                placeholder="비밀번호 확인"
+                value={passwordCheck}
+                onChange={(e) => setPasswordCheck(e.target.value)}
+              />
+            )}
+            <button
+              className={`submit-button ${loading ? "loading" : ""}`}
+              onClick={handleSubmit}
+              disabled={loading || (isRegister && !isCodeVerified)}
+            >
+              {loading ? "처리 중..." : isRegister ? "가입하기" : "로그인"}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

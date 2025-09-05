@@ -20,44 +20,41 @@ const visions = [
 ];
 
 function MainPage() {
+  const [userEmail, setUserEmail] = useState(() =>
+    sessionStorage.getItem("userEmail")
+  );
   const [modalType, setModalType] = useState(null);
-  const [userEmail, setUserEmail] = useState(null);
   const navigate = useNavigate();
+  const handleLoginSuccess = (email) => {
+    setUserEmail(email);
+    sessionStorage.setItem("userEmail", email);
+    toast.success("로그인되었습니다.");
+  };
+  const handleLogout = () => {
+    setUserEmail(null);
+    sessionStorage.removeItem("userEmail");
+    toast.success("로그아웃되었습니다.");
+  };
 
-  const openModal = (type) => setModalType(type);
-  const closeModal = () => setModalType(null);
-
+  // 시작하기 버튼 클릭 시
   const handleStartClick = () => {
     if (userEmail) {
       navigate("/main");
     } else {
-      toast.error("로그인을 해주세요.", {
-        duration: 3000,
-      });
+      toast.error("로그인을 해주세요.");
+      setModalType("login");
     }
   };
-
-  const handleLoginSuccess = (email) => {
-    setUserEmail(email);
-  };
-
-  const handleLogout = () => {
-    setUserEmail(null);
-    toast.success("로그아웃되었습니다.", {
-      duration: 3000,
-    });
-  };
-
   const handleNavItemClick = (type) => {
     switch (type) {
       case "start":
         handleStartClick();
         break;
       case "login":
-        openModal("login");
+        setModalType("login");
         break;
       case "register":
-        openModal("register");
+        setModalType("register");
         break;
       case "logout":
         handleLogout();
@@ -86,6 +83,9 @@ function MainPage() {
       ];
     }
   };
+
+  // 모달 닫기
+  const closeModal = () => setModalType(null);
 
   return (
     <div className="main-page">
@@ -121,15 +121,24 @@ function MainPage() {
 
       <nav className="navbar">
         <div className="container nav-container">
-          <a href="#home" className="logo">
+          <span
+            className="logo"
+            style={{ fontWeight: "bold", fontSize: "1.5rem" }}
+          >
             Q-Ready
-          </a>
+          </span>
           <ul className="nav-links">
             {getNavItems().map((item, index) => (
               <li key={index}>
                 <button
                   className={item.className}
                   onClick={() => handleNavItemClick(item.type)}
+                  disabled={item.type === "user"}
+                  style={
+                    item.type === "user"
+                      ? { cursor: "default", background: "none", color: "#888" }
+                      : {}
+                  }
                 >
                   {item.text}
                 </button>

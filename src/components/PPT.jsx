@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function PptPage() {
+  let navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -16,6 +18,9 @@ function PptPage() {
         "유효하지 않은 파일 형식입니다. .pptx 또는 .xls 파일만 선택 가능합니다."
       );
     }
+  };
+  const Go = () => {
+    navigate("/");
   };
 
   const handleFileUpload = async () => {
@@ -109,6 +114,9 @@ function PptPage() {
           >
             {loading ? "생성중..." : "todo리스트 생성하기"}
           </button>
+          <div className="GoBack" onClick={Go}>
+            <button className="Button">홈으로가기</button>
+          </div>
         </div>
       </div>
     </div>
