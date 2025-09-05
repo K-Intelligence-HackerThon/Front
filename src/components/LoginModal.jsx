@@ -50,10 +50,9 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      const res = await axios.post(
-        "https://db329f0c5a17.ngrok-free.app/email/send",
-        { email }
-      );
+      const res = await axios.post("http://127.0.0.1:8080/email/send", {
+        email,
+      });
       toast.success("인증번호가 이메일로 전송되었습니다.");
       setIsCodeSent(true);
       setTimer(180);
@@ -76,10 +75,10 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      const res = await axios.post(
-        "https://db329f0c5a17.ngrok-free.app/email/check",
-        { email, authNum }
-      );
+      const res = await axios.post("http://127.0.0.1:8080/email/check", {
+        email,
+        authNum,
+      });
       toast.success("인증번호가 확인되었습니다!");
       setIsCodeVerified(true);
     } catch (err) {
@@ -101,10 +100,10 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      const res = await axios.post(
-        "https://db329f0c5a17.ngrok-free.app/auth/login",
-        { email, password }
-      );
+      const res = await axios.post("http://127.0.0.1:8080/auth/login", {
+        email,
+        password,
+      });
       onLoginSuccess(email);
       onClose();
     } catch (err) {
@@ -130,10 +129,11 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      const res = await axios.post(
-        "https://db329f0c5a17.ngrok-free.app/auth/signup",
-        { email, password, authNum }
-      );
+      const res = await axios.post("http://127.0.0.1:8080/auth/signup", {
+        email,
+        password,
+        authNum,
+      });
       onLoginSuccess(email);
       onClose();
     } catch (err) {

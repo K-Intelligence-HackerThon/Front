@@ -28,7 +28,7 @@ function MainPage() {
   const closeModal = () => setModalType(null);
 
   const handleStartClick = () => {
-    if (userEmail) { 
+    if (userEmail) {
       navigate("/main");
     } else {
       toast.error("로그인을 해주세요.", {
@@ -42,7 +42,7 @@ function MainPage() {
   };
 
   const handleLogout = () => {
-    setUserEmail(null); 
+    setUserEmail(null);
     toast.success("로그아웃되었습니다.", {
       duration: 3000,
     });
@@ -66,12 +66,16 @@ function MainPage() {
         break;
     }
   };
-  
+
   const getNavItems = () => {
     if (userEmail) {
       return [
         { text: "시작하기", type: "start", className: "nav-button" },
-        { text: `(${userEmail})님`, type: "user", className: "nav-button-user" },
+        {
+          text: `(${userEmail})님`,
+          type: "user",
+          className: "nav-button-user",
+        },
         { text: "로그아웃", type: "logout", className: "nav-button" },
       ];
     } else {

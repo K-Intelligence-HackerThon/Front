@@ -103,14 +103,11 @@ body {
   opacity: 1;
   transition: none;
 }
-
-/* --- Hero Section --- */
 .hero {
   background-color: #007bff;
   color: white;
   text-align: center;
   padding: 7rem 0 5rem;
-  margin-top: 60px; /* To prevent content from being hidden behind fixed navbar */
 }
 
 .hero-content {
@@ -557,4 +554,62 @@ body {
   border-top: 3px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+.error-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #fafafa;
+}
+
+.error-card {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.error-code {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #e74c3c;
+  margin: 0;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.error-desc {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+  border: none;
+}
+
+.btn-secondary {
+  background: #ddd;
+  color: #333;
+  border: none;
 }
