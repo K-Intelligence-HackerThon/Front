@@ -12,8 +12,6 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
   const [timer, setTimer] = useState(180);
   const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
-
-  // useEffect for timer
   useEffect(() => {
     let countdown;
     if (isCodeSent && timer > 0 && !isCodeVerified) {
@@ -26,8 +24,6 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     return () => clearInterval(countdown);
   }, [isCodeSent, timer, isCodeVerified]);
-
-  // useEffect to reset state when modal is closed
   useEffect(() => {
     if (!show) {
       setEmail("");
@@ -51,7 +47,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      await axios.post("http://10.80.161.158:8080/email/send", {
+      await axios.post("https://2923b5ff89fc.ngrok-free.app/email/send", {
         email,
       });
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -76,7 +72,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      await axios.post("http://10.80.161.158:8080/email/check", {
+      await axios.post("https://2923b5ff89fc.ngrok-free.app/email/check", {
         email,
         authNum,
       });
@@ -101,7 +97,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      await axios.post("http://10.80.161.158:8080/auth/login", {
+      await axios.post("https://2923b5ff89fc.ngrok-free.app/auth/login", {
         email,
         password,
       });
@@ -130,7 +126,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      await axios.post("http://10.80.161.158:8080/auth/signup", {
+      await axios.post("https://2923b5ff89fc.ngrok-free.app/auth/signup", {
         email,
         password,
         authNum,
@@ -167,12 +163,6 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
   return (
     <>
-      <link 
-        rel="stylesheet" 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-        xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
-        crossorigin="anonymous" 
-      />
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <span className="close-button" onClick={onClose}>
