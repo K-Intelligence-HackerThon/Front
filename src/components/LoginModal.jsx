@@ -47,7 +47,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      await axios.post("https://2923b5ff89fc.ngrok-free.app/email/send", {
+      await axios.post("https://d7ea74fe76f4.ngrok-free.app/email/send", {
         email,
       });
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -72,7 +72,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setEmailLoading(true);
     try {
-      await axios.post("https://2923b5ff89fc.ngrok-free.app/email/check", {
+      await axios.post("https://d7ea74fe76f4.ngrok-free.app/email/check", {
         email,
         authNum,
       });
@@ -97,7 +97,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      await axios.post("https://2923b5ff89fc.ngrok-free.app/auth/login", {
+      await axios.post("https://d7ea74fe76f4.ngrok-free.app/auth/login", {
         email,
         password,
       });
@@ -126,7 +126,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
     setLoading(true);
     try {
-      await axios.post("https://2923b5ff89fc.ngrok-free.app/auth/signup", {
+      await axios.post("https://d7ea74fe76f4.ngrok-free.app/auth/signup", {
         email,
         password,
         authNum,
