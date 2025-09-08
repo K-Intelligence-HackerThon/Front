@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react"; 
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal";
@@ -25,10 +25,23 @@ function MainPage() {
   );
   const [modalType, setModalType] = useState(null);
   const navigate = useNavigate();
+
+  // 추가된 부분 시작
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem("userEmail");
+    if (storedEmail && storedEmail !== userEmail) {
+      setUserEmail(storedEmail);
+    }
+  }, [userEmail]);
+  // 추가된 부분 끝
+
   const handleLoginSuccess = (email) => {
     setUserEmail(email);
     sessionStorage.setItem("userEmail", email);
     toast.success("로그인되었습니다.");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); 
   };
   const handleLogout = () => {
     setUserEmail(null);
