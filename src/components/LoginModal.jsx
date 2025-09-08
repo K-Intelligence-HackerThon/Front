@@ -14,7 +14,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
 
-  // ===== 타이머 관리 =====
+  // ===== 타이머 관리: 이메일 인증 코드 유효 시간 카운트다운 =====
   useEffect(() => {
     let countdown;
     if (isCodeSent && timer > 0 && !isCodeVerified) {
@@ -26,7 +26,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     return () => clearInterval(countdown);
   }, [isCodeSent, timer, isCodeVerified]);
 
-  // ===== 모달 초기화 =====
+  // ===== 모달 초기화: 모달이 닫힐 때 모든 상태를 초기화 =====
   useEffect(() => {
     if (!show) resetAllStates();
   }, [show]);
@@ -64,7 +64,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setEmailLoading(true);
     try {
-      await axios.post("https://d7ea74fe76f4.ngrok-free.app/email/send", {
+      await axios.post("http://10.80.161.161:8080/email/send", {
         email,
       });
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -85,7 +85,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setEmailLoading(true);
     try {
-      await axios.post("https://d7ea74fe76f4.ngrok-free.app/email/check", {
+      await axios.post("http://10.80.161.161:8080/email/check", {
         email,
         authNum,
       });
@@ -106,7 +106,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setLoading(true);
     try {
-      await axios.post("https://d7ea74fe76f4.ngrok-free.app/auth/login", {
+      await axios.post("http://10.80.161.161:8080/auth/login", {
         email,
         password,
       });
@@ -131,7 +131,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setLoading(true);
     try {
-      await axios.post("https://d7ea74fe76f4.ngrok-free.app/auth/signup", {
+      await axios.post("http://10.80.161.161:8080/auth/signup", {
         email,
         password,
         authNum,
@@ -145,18 +145,18 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
     }
   };
 
-  // ===== 에러 처리 =====
+  // ===== 에러 처리: 서버 응답 상태에 따라 사용자에게 알림 =====
   const handleApiError = (err) => {
     const errorMessage = err.response?.data?.message || err.message;
-
-    if (errorMessage.includes("already exists")) {
+    if (err.response?.status === 403) {
+      toast.error("비밀번호나 이메일을 다시한번 확인해주세요.");
+    } else if (errorMessage.includes("already exists")) {
       toast.error("이미 가입된 이메일입니다.");
-    } else if (errorMessage.includes("Invalid credentials")) {
-      toast.error("이메일 또는 비밀번호를 잘못 입력했습니다.");
     } else if (errorMessage.includes("invalid code")) {
       toast.error("인증번호가 올바르지 않습니다.");
     } else {
-      toast.error(`에러 발생: ${errorMessage}`);
+      toast.error(`에러가 발생했습니다. 잠시 후 다시 시도해주세요.`);
+      console.error(err);
     }
   };
 

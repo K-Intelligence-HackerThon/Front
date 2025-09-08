@@ -3,22 +3,81 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+function Result({ result, setResult }) {
+  if (!result) {
+    return <div>결과를 불러오는 중입니다...</div>;
+  }
+
+  const { basic_questions, pressure_questions, feedback } = result;
+
+  return (
+    <div className="Last">
+      <h1>결과입니다</h1>
+      <h4>AI는 정확하지 않을 수 있습니다. AI를 신뢰하지 마세요.</h4>
+      <hr></hr>
+      <h2>기본 질문</h2>
+      <ul>
+        {basic_questions?.map((item, index) => (
+          <li key={index}>
+            <p>
+              <strong>질문:</strong> {item.question}
+            </p>
+            <p>
+              <strong>답변:</strong> {item.answer}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <h2>압박 질문</h2>
+      <ul>
+        {pressure_questions?.map((item, index) => (
+          <li key={index}>
+            <p>
+              <strong>질문:</strong> {item.question}
+            </p>
+            <p>
+              <strong>답변:</strong> {item.answer}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <h2>피드백</h2>
+      <hr></hr>
+      <p>{feedback}</p>
+
+      <button onClick={() => setResult(false)} className="Button2">
+        돌아가기
+      </button>
+    </div>
+  );
+}
+
 function PptPage() {
   let navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(false);
+  const [apiData, setApiData] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && (file.name.endsWith(".pptx") || file.name.endsWith(".xls"))) {
+    if (
+      file &&
+      (file.name.endsWith(".pptx") ||
+        file.name.endsWith(".xls") ||
+        file.name.endsWith(".pdf"))
+    ) {
       setSelectedFile(file);
     } else {
       setSelectedFile(null);
       toast.error(
-        "유효하지 않은 파일 형식입니다. .pptx 또는 .xls 파일만 선택 가능합니다."
+        "유효하지 않은 파일 형식입니다. .pptx 또는 .xls 또는 .pdf 파일만 선택 가능합니다."
       );
     }
   };
+
   const Go = () => {
     navigate("/");
   };
@@ -33,7 +92,7 @@ function PptPage() {
     const formData = new FormData();
     formData.append("file", selectedFile);
 
-    const serverUrl = "https://your-placeholder-server.com/upload";
+    const serverUrl = "https://your-placeholder-server.com/upload"; 
     try {
       const response = await axios.post(serverUrl, formData, {
         headers: {
@@ -43,8 +102,11 @@ function PptPage() {
 
       if (response.status === 200) {
         toast.success("파일이 성공적으로 업로드되었습니다.");
+        setApiData(response.data);
+        setResult(true);
       } else {
         toast.error("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+        setResult(false);
       }
     } catch (error) {
       console.error("업로드 중 에러 발생:", error);
@@ -53,6 +115,7 @@ function PptPage() {
           error.response?.data?.message || error.message
         }`
       );
+      setResult(false);
     } finally {
       setLoading(false);
     }
@@ -119,6 +182,7 @@ function PptPage() {
           </div>
         </div>
       </div>
+      {result && <Result result={apiData} setResult={setResult} />}
     </div>
   );
 }
