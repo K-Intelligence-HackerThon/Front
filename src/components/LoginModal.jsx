@@ -64,7 +64,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setEmailLoading(true);
     try {
-      await axios.post("http://10.80.161.161:8080/email/send", {
+      await axios.post("http://10.80.161.151:8080/email/send", {
         email,
       });
       toast.success("인증번호가 이메일로 전송되었습니다.");
@@ -85,7 +85,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setEmailLoading(true);
     try {
-      await axios.post("http://10.80.161.161:8080/email/check", {
+      await axios.post("http://10.80.161.151:8080/email/check", {
         email,
         authNum,
       });
@@ -106,7 +106,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setLoading(true);
     try {
-      await axios.post("http://10.80.161.161:8080/auth/login", {
+      await axios.post("http://10.80.161.151:8080/auth/login", {
         email,
         password,
       });
@@ -131,7 +131,7 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
 
     setLoading(true);
     try {
-      await axios.post("http://10.80.161.161:8080/auth/signup", {
+      await axios.post("http://10.80.161.151:8080/auth/signup", {
         email,
         password,
         authNum,
@@ -144,11 +144,9 @@ function LoginModal({ show, onClose, isRegister, onLoginSuccess }) {
       setLoading(false);
     }
   };
-
-  // ===== 에러 처리: 서버 응답 상태에 따라 사용자에게 알림 =====
   const handleApiError = (err) => {
     const errorMessage = err.response?.data?.message || err.message;
-    if (err.response?.status === 403) {
+    if (err.response?.status === 400) {
       toast.error("비밀번호나 이메일을 다시한번 확인해주세요.");
     } else if (errorMessage.includes("already exists")) {
       toast.error("이미 가입된 이메일입니다.");
